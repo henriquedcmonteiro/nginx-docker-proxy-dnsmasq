@@ -27,45 +27,55 @@ http://webapp2.local will show: WebApp 2 - Proxy Working!
 
 📁 Project Structure
 
-Docker/
-├── nginx-proxy/
-│   ├── docker-compose.yml
-│   └── nginx.conf
-└── webapps/
-    ├── docker-compose.yml
-    └── webapp1/
-    │   └── html/index.html
-    └── webapp2/
-        └── html/index.html
-
+```
+📁 Docker/
+├─ 📁 nginx-proxy/
+│  ├─ docker-compose.yml
+│  └─ nginx.conf
+└─ 📁 webapps/
+   ├─ docker-compose.yml
+   ├─ 📁 webapp1/
+   │  └─ html/index.html
+   └─ 📁 webapp2/
+      └─ html/index.html
+```
 ⚙️ How to Use
 
 1. Install and configure dnsmasq (on your Linux host)
 
+```
 sudo apt install dnsmasq
 sudo vim /etc/dnsmasq.d/proxy.conf
+```
 add the mappings to your host IP (e.g. 192.168.0.116):
+
+```
 address=/webapp1.local/192.168.0.116
 address=/webapp2.local/192.168.0.116
 sudo systemctl restart dnsmasq
+```
 
 Test with:
+
+```
 dig webapp1.local @127.0.0.1 +short
+```
 You should get back your local IP.
 
 2. Create a shared Docker network
-
+```
 docker network create proxy-net
-
+```
 3. Start the webapps
-
-  cd Docker/webapps
-  docker compose up -d
-
+```
+cd Docker/webapps
+docker compose up -d
+```
 4. Start the NGINX proxy
-
+```
 cd ../nginx-proxy
 docker compose up -d
+```
 
 ✅ Final Test
 Now access:
@@ -75,5 +85,3 @@ http://webapp1.local
 http://webapp2.local
 
 You should see the expected HTML message from each container, routed through the reverse proxy.
-
-Let me know if you want a version do README em português também, ou um modelo com badges, preview GIF, ou comandos de teardown (docker compose down, etc).
